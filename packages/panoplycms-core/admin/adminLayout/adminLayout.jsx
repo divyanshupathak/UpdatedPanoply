@@ -27,7 +27,7 @@ class AdminLayout extends Component {
 							{ this.props.content }
 						</div>
 					</div>
-					<div className="row" >
+					<div className="row">
 						<AdminFooter />
 					</div>
 				</div>

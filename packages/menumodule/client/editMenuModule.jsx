@@ -159,7 +159,7 @@ EditMenuModule = createReactClass({
 						<MenuItemTypes value={this.data.menuModuleModuleData.menuItems?this.data.menuModuleModuleData.menuItems:[]}/>
 						<div className="form-group">
 							<div className = "col-sm-offset-2 col-sm-10">
-								<button className="btn btn-primary ">UPDATE</button>
+								<button className="btn btn-primary">UPDATE</button>
 								&nbsp;&nbsp;
 								<a className="btn btn-danger" href={FlowRouter.path('modulesManager')}>CANCEL</a>
 							</div>

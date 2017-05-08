@@ -36,17 +36,18 @@ _.extend(PanoplyRouter, {
 			if(PanoplyCMSCollections.packageRoutes.ready() && PanoplyCMSCollections.menuItemRoutes.ready() && PanoplyCMSCollections.roles.ready()){
 				packages = PanoplyCMSCollections.RegisteredPackages.find().fetch()
 
-				// Get List of available Templates
+				/*Get List of available Templates*/
 				let tmplArray = _.findWhere(packages, {name: "template"}) || []
 
 				let site = PanoplyCMSCollections.Sites.findOne({})
 
-				// Get Default Template Parameters
+				/*Get Default Template Parameters*/
 				var defaultTemplate = _.find(tmplArray.templates, function(t){
 					if(t.active)
 						return t
 				})
-				// Render offline component
+
+				/* Render offline component */
 				if(site.siteOffline && !Roles.userIsInRole(Meteor.userId(), ['admin'])){
 					let offline = defaultTemplate.offline || 'CoreOfflineComponent';
 					PanoplyRouter.route('/', {
@@ -56,21 +57,26 @@ _.extend(PanoplyRouter, {
 					})
 				} else {
 					/* Front End Routing Starts */
+
+					/* Get all available menuItems Data */
 					menuItems = PanoplyCMSCollections.MenuItems.find({ trash:false }).fetch()
 
-					// Get List of available Modules
+					/* Get List of available Modules */
 					let moduleTypes = _.filter(packages, p => { return p.type == "module" }) || [];
 					// console.log("moduleTypes :: router.jsx ==>", moduleTypes)
 
+					/* Get available module names */
 					let mod = _.pluck(moduleTypes, 'name') || [];
 					// console.log("module name :: router.jsx ==>", mod)
 
+					/* Get positions defined in template */
 					let positions = defaultTemplate.positions || [];
 					// console.log("positions :: router.jsx ==>", positions)
 
-					var defaultModules = {};
-					var modules = {};
+					let defaultModules = {};
+					let modules = {};
 
+					/* Modules show on all pages (No menuItem id assigned) */
 					if(!menuItems.length){
 						let modulesList = PanoplyCMSCollections.Modules.find({type: {$in: mod}, trash: false, position: {$in: positions}, $or: [{allPages: true}]}).fetch();
 
@@ -81,43 +87,53 @@ _.extend(PanoplyRouter, {
 
 					/* Get List of modules on position */
 					function getModulesList(positions, modulesList, moduleTypes){
-						// console.log("----", modulesList)
-						// console.log("positions =>", positions)
-						var modules = {}, defaultModules = {}
-						_.each(positions, p => {
+						
+						// positions = Positions defined in templates
+						// modulesList = Modules created by User
+						// moduleTypes = html block, menu module, slider module etc
+
+						let modules = {}, defaultModules = {}
+						_.each(positions, position => {
+							// console.log("position ----", position)
 							let mod = [], defaultMod = []
-							_.each(modulesList, m => {
-								if(m.position == p){
-									_.each(moduleTypes, t => {
-										if(t.name == m.type){
-											m.moduleData ? m.moduleData['key']=Math.random() : m['moduleData'] = { key: Math.random() }
-											if(m.showTitle) m.moduleData['module_title'] = m.name
-											mod.push(React.createElement(eval(t.component), m.moduleData))
-											if(m.allPages) defaultMod.push(React.createElement(eval(t.component), m.moduleData))
+							_.each(modulesList, modules => {
+								// console.log("modules ----", modules)
+								// console.log("modules moduleData ----", modules.moduleData)
+								if(modules.position == position){
+									_.each(moduleTypes, moduleType => {
+										// console.log("moduleType ----", moduleType)
+										if(moduleType.name == modules.type){
+											modules.moduleData ? modules.moduleData['key']=Math.random() : modules['moduleData'] = { key: Math.random() }
+											if(modules.showTitle) modules.moduleData['module_title'] = modules.name
+											mod.push(React.createElement(eval(moduleType.component), modules.moduleData))
+											if(modules.allPages) defaultMod.push(React.createElement(eval(moduleType.component), modules.moduleData))
 										}
 									})
 								}
 							})
-							modules[p] = mod;
-							defaultModules[p] = defaultMod;
+							modules[position] = mod;
+							defaultModules[position] = defaultMod;
 						})
+						// console.log("=====", modules)
+						// console.log(">>>>>", defaultModules)
 						return { modules, defaultModules }
 					}
 
+					/* Modules show on only specified menuItem */
+
 					_.each(menuItems, (i) => {
+						// console.log("menuItems ------", i)
 						if(i.MenuItemType == 'url') return;
 
+						/* Get Modules List with specified menuItem id */
 						let modulesList = PanoplyCMSCollections.Modules.find({type: {$in: mod}, trash: false, position: {$in: positions}, $or: [{allPages: true}, {menuItems: i._id}]}).fetch();
 						// console.log("modulesList ---", modulesList)
 
 						let allModules = getModulesList(positions, modulesList, moduleTypes)
 						// console.log("allModules ---", allModules)
 
-						modules = allModules.modules
+						let modules = allModules.modules
 						defaultModules = allModules.defaultModules
-
-						let sliderModulesList = PanoplyCMSCollections.Modules.find({type:"slidermodule", position: {$in: positions} }).fetch();
-						// console.log("=========", sliderModulesList)
 
 						let content;
 						switch(i.MenuItemType){
@@ -131,7 +147,9 @@ _.extend(PanoplyRouter, {
 
 						let route = {
 							action: (params, queryParams) => {
-								params = { id: i.MenuItemTypeId, sliderModule: sliderModulesList};
+								console.log("MenuItemTypeId --------", i.MenuItemTypeId);
+								// i.MenuItemTypeId = article id
+								params = { id: i.MenuItemTypeId, modules: modules};
 								ReactLayout.render(eval(defaultTemplate.layout), {
 									content: React.createElement(eval(content), params),
 									...modules
@@ -146,7 +164,7 @@ _.extend(PanoplyRouter, {
 								let route = {
 									action: (params, queryParams) => {
 										ReactLayout.render(eval(defaultTemplate.layout), { content: React.createElement(eval(defaultTemplate.articleView), { id: a._id }),
-										...modules
+											...modules
 										})
 									}
 								}

@@ -40,7 +40,7 @@ let LiItem = data => {
 		menus = PanoplyCMSCollections.Menus.find({trash: false}).fetch()
 	if(data.title == 'COMPONENTS')
 		components = PanoplyCMSCollections.RegisteredPackages.find({type: 'component'},{_id: 1, name: 1}).fetch()
-	var c = 0;
+	let c = 0;
 	return (
 		<li className="panel panel-default" id="dropdown">
 			<a data-toggle="collapse" href={'#'+data.title}>
@@ -51,7 +51,7 @@ let LiItem = data => {
 				<div className="panel-body">
 					<ul className="nav-children" style={style}>
 						{
-							data.param.map( p => {
+							data.param.map(p => {
 								let params = {}
 								if(p.url){
 									params = { href: p.url, target: "_blank" }

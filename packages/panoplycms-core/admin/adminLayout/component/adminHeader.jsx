@@ -24,6 +24,7 @@ export default class AdminHeader extends Component {
 	}
 }
 
+
 // export default createContainer(() => {
 // 	let handle1 = Meteor.subscribe('siteName')
 // 	let handle2 = Meteor.subscribe('usersProfile')

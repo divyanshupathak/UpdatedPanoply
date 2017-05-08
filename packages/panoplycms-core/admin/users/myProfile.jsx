@@ -42,12 +42,12 @@ class UserList extends Component {
 									<td>{this.props.user?this.props.user.profile?this.props.user.profile.username:'':''}</td>
 									<td>{this.props.user?this.props.user.emails[0].address:''}</td>
 									<td><a className = "btn btn-primary fa fa-pencil-square-o" data-toggle="tooltip" title="Edit" href={FlowRouter.path('editUser',{_id:this.props.user._id})}></a></td>
-									<td><button disabled='true' className = "btn btn-danger fa fa-trash-o" href={FlowRouter.path('dashboard')} data-toggle="tooltip" title="Delete"></button></td>
+									<td><button disabled='true' className = "btn btn-danger fa fa-trash-o" href={FlowRouter.path('dashboard')} data-toggle="tooltip" title="Delete" ></button></td>
 								</tr> 
 							</tbody>
 						</table>
 					</div>
-				</div> 
+				</div>
 			</div>
 		)
 	}
@@ -57,7 +57,6 @@ export default createContainer(() => {
 	let handle = Meteor.subscribe('usersProfile')
 	return {
 		pageLoading: ! handle.ready(), 
-		user: Meteor.users.findOne(),
-		// image: Images.findOne()
+		user: Meteor.users.findOne()
 	};
 }, UserList)

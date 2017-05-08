@@ -1,6 +1,6 @@
 var createReactClass = require('create-react-class');
 
-MenuItemT = createReactClass({
+MenuItemType = createReactClass({
 	mixins: [ReactMeteorData],
 	getMeteorData() {
 		return {
@@ -95,4 +95,4 @@ MenuItemT = createReactClass({
 	}
 })
 
-export default MenuItemT;
+export default MenuItemType;

@@ -45,7 +45,7 @@ class SystemLayout extends Component {
 		let name = $('#sitename').val();
 		let regex = /[^.]+$/;
 		// let siteOffline = $('input[name="options"]:checked').val() == "Yes" ? true : $('input[name="options"]:checked').val()
-		let siteOffline = $('input[name="options"]:checked').val() == "Yes" ? true : false;
+		let siteOffline = $('input[name="options"]:checked').val() == 1 ? true : false;
 		// console.log(typeof(siteOffline))
 		let siteMetaKeyword = $('#siteMetaKeyword').val();
 		let siteMetaDesc = $('#siteMetaDesc').val();

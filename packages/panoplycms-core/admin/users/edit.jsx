@@ -118,9 +118,9 @@ class EditUser extends Component {
 		let img = Images.findOne({ _id:Meteor.user().profile.imageId })
 
 		if(this.state.msg){
-			msg = <AlertMessage data={'updated your profile.'} func={this.resetSuccessMsg.bind(this)} />
+			msg = <AlertMessage data={'updated user profile.'} func={this.resetSuccessMsg} />
 		}else if(this.state.errorMsg){
-			msg = <AlertMessageOfError data={this.state.errorMsg} func={this.resetSuccessMsg.bind(this)} />
+			msg = <AlertMessageOfError data={this.state.errorMsg} func={this.resetSuccessMsg} />
 		}else{
 			msg = '';
 		}

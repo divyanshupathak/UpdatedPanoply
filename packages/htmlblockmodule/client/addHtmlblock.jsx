@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-import MenuItemT from './menuItemTypes.jsx'
+import MenuItemType from './menuItemTypes.jsx'
 import Positions from './positions.jsx'
 
 var createReactClass = require('create-react-class');
@@ -155,7 +155,7 @@ AddHtmlblock = createReactClass({
 								<input type="checkbox" className="allPage" ref="desc" name="allPage" />
 							</div>
 						</div>
-						<MenuItemT value={[]} />
+						<MenuItemType value={[]} />
 						<div className="form-group">
 							<div className = "col-sm-offset-2 col-sm-10">
 								<button className="btn btn-primary">SAVE</button>
@@ -170,15 +170,16 @@ AddHtmlblock = createReactClass({
 	}
 });
 
-MenuList = createReactClass({
+/*MenuList = createReactClass({
 	render(){
 		return (
 			<option value={this.props.menu._id}>{this.props.menu.title}</option>
 		);
 	}
-});
+});*/
 
 HTMLBlock = data => {
+	/*console.log("addHtmlblock :: params =>>", data)*/
 	showTitle = '';
 	if(data.module_title) showTitle = <h4>{data.module_title}</h4>;
 	return (

@@ -6,7 +6,6 @@ var createReactClass = require('create-react-class');
 
 import FrontHeader from './homeLayouts/Header.jsx';
 
-
 DefaultTemplate = createReactClass({
 	mixins:[ReactMeteorData],
 	getMeteorData(){
@@ -60,125 +59,16 @@ DefaultTemplate = createReactClass({
 	},
 	render() {
 		console.log("======", this.props)
-		// console.log("********", this.props.content.props.sliderModule)
+		// console.log("********", this.props.content)
+		// console.log("mod data ==>", this.data.modulesList)
 		return (
 			<div>
-				<FrontHeader module={this.props.top} topHeaderLeft={this.props.topHeaderLeft} topHeaderRight={this.props.topHeaderRight} siteData={this.data.result} />
+				<FrontHeader module={this.props.mainHeaderRight} topHeaderLeft={this.props.topHeaderLeft} topHeaderRight={this.props.topHeaderRight} siteData={this.data.result} />
 
-				{/*Slider*/}
-				{
-					this.props.content.props.sliderModule ?
-						this.props.content.props.sliderModule.map((data) =>{
-							// console.log("======", data)
-							if(data.trash == false){
-								return(
-									<section key={data._id} className="main-slider" data-start-height="600" data-slide-overlay="yes">
-										<div className="tp-banner-container">
-											<div className="tp-banner">
-												{
-													data.moduleData ?
-														data.moduleData.map((value, index) =>{
-															// console.log("=====", value)
-															let img = Images.findOne({ _id: value.bgImageId })
-															// console.log("----------", img)
-															return(
-																<ul key={index}>
-																	{
-																		value.published == true ?
-																			<li data-transition="fade" data-slotamount="1" data-masterspeed="1000" data-thumb={img ? img.url() :''} data-saveperformance="off" data-title="">
-															          <img src={img ? img.url() :''} alt="" data-bgposition="center top" data-bgfit="cover" data-bgrepeat="no-repeat" />
-															          <div className="tp-caption sfr sfb tp-resizeme"
-															            data-x="center" data-hoffset="0"
-															            data-y="center" data-voffset="-10"
-															            data-speed="1500"
-															            data-start="0"
-															            data-easing="easeOutExpo"
-															            data-splitin="none"
-															            data-splitout="none"
-															            data-elementdelay="0.01"
-															            data-endelementdelay="0.3"
-															            data-endspeed="1200"
-															            data-endeasing="Power4.easeIn">
-															            <h2 className="big-title text-center">{value && value.title ? value.title :''}</h2>
-															          </div>
-															              
-															          <div className="tp-caption sfr sfb tp-resizeme"
-															            data-x="center" data-hoffset="0"
-															            data-y="center" data-voffset="-120"
-															            data-speed="1500"
-															            data-start="500"
-															            data-easing="easeOutExpo"
-															            data-splitin="none"
-															            data-splitout="none"
-															            data-elementdelay="0.01"
-															            data-endelementdelay="0.3"
-															            data-endspeed="1200"
-															            data-endeasing="Power4.easeIn">
-															            	<div className="normal-text text-center">{value && value.description ? value.description :''}</div>
-															            {/*<!--Slider Separeter Line-->*/}
-															              <div className="slider-separeter-line">
-															                <div className="line-one"></div>
-															                <div className="line-two"></div>
-															              </div>
-															          </div>
-
-															          <div className="tp-caption sfl sfb tp-resizeme"
-															            data-x="center" data-hoffset="0"
-															            data-y="center" data-voffset="70"
-															            data-speed="1500"
-															            data-start="1000"
-															            data-easing="easeOutExpo"
-															            data-splitin="none"
-															            data-splitout="none"
-															            data-elementdelay="0.01"
-															            data-endelementdelay="0.3"
-															            data-endspeed="1200"
-															            data-endeasing="Power4.easeIn">
-															            <a href={value && value.linkUrl ? value.linkUrl :''} className="white-btn">{value && value.linkUrl ? value.linkTitle :''}</a>
-															          </div>
-																			</li>
-																		: ''
-																	}
-																</ul>
-															);
-														})
-													:''
-												}
-											</div>
-										</div>
-									</section>
-								);
-							}else{
-								return <div></div>
-							}
-						})
-					:''
-				}
-				{
-					this.props.utility.length > 0 ?
-						this.props.utility.map((value) => {
-							return value;
-						})
-					: ''
-				}
-				{
-					this.props.feature.length > 0 ?
-						this.props.feature.map((value) => {
-							return value;
-						})
-					:''
-				}
-				{
-					this.props.extension.length > 0 ?
-						this.props.extension.map((value) =>{
-							return value;
-						})
-					: ''
-				}
 				<div className="container">
 					<div className="row">
 						<div className={_.isEmpty(this.props.sidebar) ? "col-sm-12 blog-main" : "col-sm-8 blog-main"}>
-							{this.props.content}
+							{ this.props.content }
 						</div>
 						<div className={_.isEmpty(this.props.sidebar) ? "":"col-sm-3 col-sm-offset-1 blog-sidebar"}>
 							<SidePanel module={this.props.sidebar} />
@@ -242,11 +132,13 @@ DefaultArticle = createReactClass({
 		}
 	},
 	render(){
+		// console.log(">>>>>>", this.props.modules)
+		// console.log(FlowRouter.current())
 		if(this.data.article){
 			if(!_.has(this.data.article, "_id")){
 				return <LoadingSpinner />;
 			}
-			return <ArticleFullView {...this.data.article} />
+			return <ArticleFullView articles={this.data.article} modules={this.props.modules} />
 		}else{
 			return (
 				<div className="col-md-3 col-md-offset-5">
@@ -257,14 +149,52 @@ DefaultArticle = createReactClass({
 	}
 })
 
-ArticleFullView = article => {
-	let userData = Meteor.users.findOne({_id: article.ownerId})
+ArticleFullView = data => {
+	console.log(data)
+	let userData = Meteor.users.findOne({_id: data.ownerId})
 	return (
-		<div className="blog-post">
-			<h2 className="blog-post-title">{article && article.title ? article.title.toUpperCase() :''}</h2>
-			<p className="blog-post-meta">{article && article.createdAt ? new Date(article.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' :''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
-			<div dangerouslySetInnerHTML={{__html: article && article.article ? article.article :''}} />
-			<ShowTags tags={article && article.tags ? article.tags :''} />
+		<div>
+			{
+				data.modules && data.modules.showcase && data.modules.showcase.length > 0 ?
+					data.modules.showcase.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.utility && data.modules.utility.length > 0 ?
+					data.modules.utility.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.feature && data.modules.feature.length > 0 ?
+					data.modules.feature.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.extension && data.modules.extension.length > 0 ?
+					data.modules.extension.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.bottom && data.modules.bottom.length > 0 ?
+					data.modules.bottom.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			<div className="blog-post">
+				<h2 className="blog-post-title">{data.articles && data.articles.title ? data.articles.title.toUpperCase() :''}</h2>
+				<p className="blog-post-meta">{data.articles && data.articles.createdAt ? new Date(data.articles.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' :''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
+				<div dangerouslySetInnerHTML={{__html: data.articles && data.articles.article ? data.articles.article :''}} />
+				<ShowTags tags={data.articles && data.articles.tags ? data.articles.tags :''} />
+			</div>
 		</div>
 	);
 }
@@ -278,7 +208,8 @@ DefaultCategory = createReactClass({
 		}
 	},
 	render(){
-		if(this.data.articles){
+		if(this.data.articles && this.data.articles.length){
+			console.log("++++++", this.data.articles)
 			if(!this.data.articles.length){
 				return <LoadingSpinner />;
 			}
@@ -301,22 +232,22 @@ DefaultCategory = createReactClass({
 	}
 })
 
-ArticleListView = article => {
-	let userData = Meteor.users.findOne({_id: article.ownerId})
+ArticleListView = data => {
+	let userData = Meteor.users.findOne({_id: data.ownerId})
 
 	let route = PanoplyRouter.current().route.path.split('/')
 	alias = ''
 	if(route[route.length - 1] != ''){
-		alias = PanoplyRouter.current().route.path+'/'+article.alias
+		alias = PanoplyRouter.current().route.path+'/'+data.alias
 	} else {
-		alias = PanoplyRouter.current().route.path+article.alias
+		alias = PanoplyRouter.current().route.path+data.alias
 	}
 	return (
 		<div className="blog-post">
-			<h2 className="blog-post-title">{article && article.title ? article.title.toUpperCase() :''}</h2>
-			<p className="blog-post-meta">{article && article.createdAt ? new Date(article.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' : ''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
-			<div dangerouslySetInnerHTML={{__html:article && article.article ? article.article.substr(0, 300)+'...':''}} />
-			<ShowTags tags={article && article.tags ? article.tags :''} />
+			<h2 className="blog-post-title">{data && data.title ? data.title.toUpperCase() :''}</h2>
+			<p className="blog-post-meta">{data && data.createdAt ? new Date(data.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' : ''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
+			<div dangerouslySetInnerHTML={{__html:data && data.article ? data.article.substr(0, 300)+'...':''}} />
+			<ShowTags tags={data && data.tags ? data.tags :''} />
 			<div className="pull-right"><a href={alias} className="btn btn-default">Read More</a></div>
 			<div className="clear-both"></div>
 		</div>
@@ -338,7 +269,7 @@ ShowTags = createReactClass({
 						this.props.tags.map(tag => {
 							let t = _.find(this.data.tags, t => { return t._id == tag })
 							if(t)
-								return <span key={tag} > <a className="label label-info"> {t.title} </a> </span>
+								return <span key={tag}><a className="label label-info"> {t.title} </a></span>
 							else return ''
 						})
 					:''
@@ -347,3 +278,9 @@ ShowTags = createReactClass({
 		)
 	}
 })
+
+class LoadingSpinner extends Component {
+	render(){
+		return <div>Loading...</div>
+	}
+}

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// import 'meteor/twbs:bootstrap';
-// import 'meteor/jquery';
-
 import Heading from '../../common/heading.jsx';
 import NotFoundComp from '../../common/notFoundComp.jsx';
 import LoadingSpinner from '../../common/loadingSpinner.jsx';
@@ -91,7 +88,7 @@ class ListArticles extends Component {
 
 				{
 					this.props.resultOfTrash.map((result) => {
-						return <RestoreModalOfArticles key={result._id} data={result} />         
+						return <RestoreModalOfArticles key={result._id} data={result} />
 					})
 				}
 

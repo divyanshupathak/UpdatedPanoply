@@ -14,7 +14,7 @@ AddSliderModule = createReactClass({
 	},
 	getInitialState(){
 		return {
-			valid:'',
+			valid: '',
 			successMsg: false,
 			errorMsg: false
 		}
@@ -260,14 +260,79 @@ class AlertMessageError extends Component {
 }
 
 SliderBlock = data => {
-	console.log("SliderBlock module :: data ==>", data)
-	showTitle = '';
-	if(data.module_title) showTitle = <h4>{data.module_title}</h4>;
-	return (
-		<div>
-			{showTitle}
-			{data.html ? <div dangerouslySetInnerHTML={{__html: data.html}} /> : 'Nothing Here'}
-		</div>
+	let dataArr = _.values(data)
+	return(
+		<section className="main-slider" data-start-height="600" data-slide-overlay="yes">
+			<div className="tp-banner-container">
+				<div className="tp-banner">
+					{
+						dataArr.map((value, index) => {
+							let img = Images.findOne({ _id: value.bgImageId })
+							return(
+								<ul key={index}>
+									{
+										value.published ?
+											<li data-transition="fade" data-slotamount="1" data-masterspeed="1000" data-thumb={img ? img.url() :''} data-saveperformance="off" data-title="">
+												<img src={img ? img.url() :''} alt="" data-bgposition="center top" data-bgfit="cover" data-bgrepeat="no-repeat" />
+												<div className="tp-caption sfr sfb tp-resizeme"
+												data-x="center" data-hoffset="0"
+												data-y="center" data-voffset="-10"
+												data-speed="1500"
+												data-start="0"
+												data-easing="easeOutExpo"
+												data-splitin="none"
+												data-splitout="none"
+												data-elementdelay="0.01"
+												data-endelementdelay="0.3"
+												data-endspeed="1200"
+												data-endeasing="Power4.easeIn">
+													<h2 className="big-title text-center">{value && value.title ? value.title :''}</h2>
+												</div>
+
+												<div className="tp-caption sfr sfb tp-resizeme"
+												data-x="center" data-hoffset="0"
+												data-y="center" data-voffset="-120"
+												data-speed="1500"
+												data-start="500"
+												data-easing="easeOutExpo"
+												data-splitin="none"
+												data-splitout="none"
+												data-elementdelay="0.01"
+												data-endelementdelay="0.3"
+												data-endspeed="1200"
+												data-endeasing="Power4.easeIn">
+													<div className="normal-text text-center">{value && value.description ? value.description :''}</div>
+													{/*<!--Slider Separeter Line-->*/}
+													<div className="slider-separeter-line">
+														<div className="line-one"></div>
+														<div className="line-two"></div>
+													</div>
+												</div>
+
+												<div className="tp-caption sfl sfb tp-resizeme"
+												data-x="center" data-hoffset="0"
+												data-y="center" data-voffset="70"
+												data-speed="1500"
+												data-start="1000"
+												data-easing="easeOutExpo"
+												data-splitin="none"
+												data-splitout="none"
+												data-elementdelay="0.01"
+												data-endelementdelay="0.3"
+												data-endspeed="1200"
+												data-endeasing="Power4.easeIn">
+													<a href={value && value.linkUrl ? value.linkUrl :''} className="white-btn">{value && value.linkUrl ? value.linkTitle :''}</a>
+												</div>
+											</li>
+										: ''
+									}
+								</ul>
+							);
+						})
+					}
+				</div>
+			</div>
+		</section>
 	);
 }
 

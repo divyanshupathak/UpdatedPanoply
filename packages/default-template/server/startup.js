@@ -11,7 +11,7 @@ Meteor.startup(function() {
 			offline:'DefaultOffline',
 			categoryView: "DefaultCategory",
 			articleView: "DefaultArticle",
-			positions: ['topHeaderLeft', 'topHeaderRight', 'mainHeaderLeft', 'mainHeaderRight', 'showcase', 'sidebar', 'top', 'utility', 'feature', 'mainTop', 'fullWidth', 'mainbody', 'contentBottom', 'extension', 'mainBottom', 'bottom', 'footer', 'mainFooterLeft', 'mainFooterRight', 'copyright']
+			positions: ['topHeaderLeft', 'topHeaderRight', 'mainHeaderLeft', 'mainHeaderRight', 'top', 'showcase', 'sidebar', 'utility', 'feature', 'mainTop', 'fullWidth', 'mainbody', 'contentBottom', 'extension', 'mainBottom', 'bottom', 'footer', 'mainFooterLeft', 'mainFooterRight', 'copyright']
 		}
 	})
 });
