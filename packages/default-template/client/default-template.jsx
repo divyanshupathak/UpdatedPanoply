@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
+import {$} from 'meteor/jquery';
 
 var createReactClass = require('create-react-class');
 
+
 import FrontHeader from './homeLayouts/Header.jsx';
 import FrontFooter from './homeLayouts/Footer.jsx';
-
 
 DefaultTemplate = createReactClass({
 	mixins:[ReactMeteorData],
@@ -17,7 +18,48 @@ DefaultTemplate = createReactClass({
 	},
 	componentDidMount: function() {
 		require('../imports/style.css')
-		// console.log(this.data.result)
+		require('../imports/animate.css')
+		require('../imports/flaticon.css')
+		require('../imports/responsive.css')
+
+		// Initialize owl carousel
+		$("#testimonial").owlCarousel({
+			navigation : false,
+			items : 1, //10 items above 1000px browser width
+			itemsDesktop : [1000,1], //5 items between 1000px and 901px
+			itemsDesktopSmall : [900,1], // betweem 900px and 601px
+			itemsTablet: [600,1], //2 items between 600 and 0
+			itemsMobile : false // itemsMobile disabled - inherit from itemsTablet option
+		});
+
+		$(".next-arrow").click(function(){
+			$("#testimonial").trigger('owl.next');
+		})
+		$(".prev-arrow").click(function(){
+			$("#testimonial").trigger('owl.prev');
+		})
+
+		/*require('../lib/plugin/rs-plugin/css/settings.css')
+		require('../lib/plugin/rs-plugin/js/jquery.themepunch.revolution.min.js')
+		require('../lib/plugin/rs-plugin/js/jquery.themepunch.tools.min.js')*/
+		// require('../lib/js/custom.js')
+
+		// Our Partner Slider Initialization
+		$('#clients').owlCarousel({
+			navigation : false,
+			singleItem : false,
+			autoPlay : 5000,
+			loop:true,
+			items : 5, //10 items above 1000px browser width
+			itemsDesktop : [1000,5], //5 items between 1000px and 901px
+			itemsDesktopSmall : [900,3], // betweem 900px and 601px
+			itemsTablet: [600,3], //2 items between 600 and 0
+			transitionStyle : "slide",
+			 //Pagination
+			pagination : true,
+			paginationNumbers: false,
+		});
+
 		document.title = this.data.result.name;
 		if(PanoplyRouter.current().path == '/'){
 			if($('meta[name=keywords]').length){
@@ -65,14 +107,12 @@ DefaultTemplate = createReactClass({
 			<div>
 				<FrontHeader module={this.props.mainHeaderRight} topHeaderLeft={this.props.topHeaderLeft} topHeaderRight={this.props.topHeaderRight} siteData={this.data.result} />
 				
-				<div className="container">
-					<div className="row">
-						<div className={_.isEmpty(this.props.sidebar) ? "col-sm-12 blog-main" : "col-sm-8 blog-main"}>
-							{ this.props.content }
-						</div>
-						<div className={_.isEmpty(this.props.sidebar) ? "":"col-sm-3 col-sm-offset-1 blog-sidebar"}>
-							<SidePanel module={this.props.sidebar} />
-						</div>
+				<div className="">
+					<div className="">
+						{ this.props.content }
+					</div>
+					<div className={_.isEmpty(this.props.sidebar) ? "":"col-sm-3 col-sm-offset-1 blog-sidebar"}>
+						<SidePanel module={this.props.sidebar} />
 					</div>
 				</div>
 
@@ -194,16 +234,52 @@ DefaultArticle = createReactClass({
 })
 
 ArticleFullView = data => {
-	// console.log(data)
 	let userData = Meteor.users.findOne({_id: data.ownerId})
 	return (
 		<div>
-			<div className="blog-post">
-				<h2 className="blog-post-title">{data.articles && data.articles.title ? data.articles.title.toUpperCase() :''}</h2>
-				<p className="post-meta-data">{data.articles && data.articles.createdAt ? new Date(data.articles.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' :''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
-				<br/>
-				<div dangerouslySetInnerHTML={{__html: data.articles && data.articles.article ? data.articles.article :''}} />
-				<ShowTags tags={data.articles && data.articles.tags ? data.articles.tags :''} />
+			{
+				data.modules && data.modules.showcase && data.modules.showcase.length > 0 ?
+					data.modules.showcase.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.utility && data.modules.utility.length > 0 ?
+					data.modules.utility.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.feature && data.modules.feature.length > 0 ?
+					data.modules.feature.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.extension && data.modules.extension.length > 0 ?
+					data.modules.extension.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			{
+				data.modules && data.modules.bottom && data.modules.bottom.length > 0 ?
+					data.modules.bottom.map((value) => {
+						return value;
+					})
+				: ''
+			}
+			<div className="container">
+				<div className="blog-post">
+					<h2 className="blog-post-title">{data.articles && data.articles.title ? data.articles.title.toUpperCase() :''}</h2>
+					<p className="post-meta-data">{data.articles && data.articles.createdAt ? new Date(data.articles.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' :''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
+					<br/>
+					<div dangerouslySetInnerHTML={{__html: data.articles && data.articles.article ? data.articles.article :''}} />
+					<ShowTags tags={data.articles && data.articles.tags ? data.articles.tags :''} />
+				</div>
 			</div>
 		</div>
 	);

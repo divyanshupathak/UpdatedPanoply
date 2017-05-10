@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 
 var createReactClass = require('create-react-class');
 
+import MenuItemType from './menuItemTypes.jsx'
 import Positions from './positions.jsx';
 
 EditSliderModule = createReactClass({
@@ -55,11 +56,16 @@ EditSliderModule = createReactClass({
 	handleUpdate(e){
 		e.preventDefault();
 		let regex = /[^.]+$/;
+		let menuItems = [];
+		$.each($("input[name='menucheck']:checked"), function(){            
+			menuItems.push($(this).val());
+		});
 
 		let sliderObj = {
 			name: this.refs.name.value,
 			type:'slidermodule',
 			position: $('#position').val(),
+			menuItems: menuItems,
 			allPages: $('.pageall').is(':checked'),
 			moduleData: []
 		}
@@ -208,10 +214,6 @@ EditSliderModule = createReactClass({
 						</div>
 						<Positions key={this.data.templateRegister._id} data={this.data.templateRegister} value={this.data.sliderModuleData?this.data.sliderModuleData.position:''}/>
 						<div className="form-group">
-							<label>All Page</label>&nbsp;&nbsp;
-							<input type="checkbox" className="pageall" ref="pageall" name="pageall" defaultChecked={this.data.sliderModuleData.allPages} />
-						</div>
-						<div className="form-group">
 							<label>Add Slides</label>
 							<div className="panel panel-default">
 								<div className="panel-heading">Slides</div>
@@ -279,6 +281,11 @@ EditSliderModule = createReactClass({
 								</ul>
 							</div>
 						</div>
+						<div className="form-group">
+							<label>All Page</label>&nbsp;&nbsp;
+							<input type="checkbox" className="pageall" ref="pageall" name="pageall" defaultChecked={this.data.sliderModuleData.allPages} />
+						</div>
+						<MenuItemType value={this.data.sliderModuleData?this.data.sliderModuleData.menuItems:[]} />
 						<div className="form-group">
 							<button className="btn btn-primary">SAVE</button>
 							&nbsp;&nbsp;

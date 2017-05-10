@@ -24,7 +24,7 @@ EditHtmlblock = createReactClass({
 	},
 	submitData(event){
 		event.preventDefault()
-		var menuItems = [];
+		let menuItems = [];
 		$.each($("input[name='menucheck']:checked"), function(){            
 			menuItems.push($(this).val());
 		});

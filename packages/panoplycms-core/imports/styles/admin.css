@@ -603,13 +603,16 @@ h1.page-header {margin-top: -5px;}
   width: inherit !important;
 }*/
 .control-label {
-    text-align: left !important;
+	text-align: left !important;
+}
+
+.slider-module-label {
+	margin-left: -15px;
 }
 
 .custom-span{
 	padding-right:10px;
 	font-size: 18px;
-
 }
 
 .btn-ico {
