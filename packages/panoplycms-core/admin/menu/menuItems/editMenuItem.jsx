@@ -146,7 +146,8 @@ class EditMenuItem extends Component {
     Session.set("msg", false)
     Session.set("errorMsg", false)
   }
-  render(){   
+  render(){
+    // console.log(this.props.menuItemData.MenuItemType.charAt(0).toUpperCase() + this.props.menuItemData.MenuItemType.slice(1))
     let msg = '';
     if(this.state.msg){
       msg = <AlertMessage data={'updated menu item.'} func={this.resetSuccessMsg.bind(this)} />
@@ -195,6 +196,7 @@ class EditMenuItem extends Component {
                   <option className="form-control" value="">Select </option>
                   <option className="form-control" value="category">Category</option>
                   <option className="form-control" value="article">Article</option>
+                  <option className="form-control" value="module">Module</option>
                 </select>
               </div>
             </div>
@@ -202,10 +204,12 @@ class EditMenuItem extends Component {
               <label htmlFor = "lastname" className = "col-sm-2 control-label">
                 {
                   (
-                    this.state.itemType ?
-                      this.state.itemType.charAt(0).toUpperCase() + this.state.itemType.slice(1)
-                    :
-                      this.props.menuItemData.MenuItemType.charAt(0).toUpperCase() + this.props.menuItemData.MenuItemType.slice(1)
+                      !this.state.itemType == 'module' || this.state.itemType == 'article' || this.state.itemType == 'category' ?
+                        this.state.itemType.charAt(0).toUpperCase() + this.state.itemType.slice(1)
+                      :
+                        !this.props.menuItemData.MenuItemType.charAt(0).toUpperCase() + this.props.menuItemData.MenuItemType.slice(1) == 'Module' || this.props.menuItemData.MenuItemType.charAt(0).toUpperCase() + this.props.menuItemData.MenuItemType.slice(1) == 'Article' || this.props.menuItemData.MenuItemType.charAt(0).toUpperCase() + this.props.menuItemData.MenuItemType.slice(1) == 'Category' ?
+                          this.props.menuItemData.MenuItemType.charAt(0).toUpperCase() + this.props.menuItemData.MenuItemType.slice(1)
+                        : ''
                   )
                 }
               </label>
@@ -215,8 +219,7 @@ class EditMenuItem extends Component {
                 :
                   itemType == 'article'?
                     <SelectArticle typeId={this.props.menuItemData.MenuItemTypeId} func={this.getMenuItemTypeValue.bind(this)} />
-                :
-                ''
+                : ''
               }
             </div>
             <div className = "form-group">

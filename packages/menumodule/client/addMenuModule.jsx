@@ -42,6 +42,7 @@ AddMenuModule = createReactClass({
 				position:position,
 				showTitle:showTitle,
 				menuItems:menuItems,
+				moduleClass: $("#module-Class").val(),
 				allPages:allPage,
 				moduleData:{
 					menuItem:menu
@@ -120,6 +121,12 @@ AddMenuModule = createReactClass({
 							<label htmlFor = "firstname" className = "col-sm-2 control-label">{i18n('ADMIN_COTNENTS_ARTICLES_ADDARTICLE_FORM_TITLE')}</label>
 							<div className = "col-sm-10">
 								<input type = "text" name="title" ref="title"  className="form-control" placeholder="Enter title" required/>
+							</div>
+						</div>
+						<div className = "form-group">
+							<label htmlFor = "firstname" className = "col-sm-2 control-label">Module Suffix Class</label>
+							<div className = "col-sm-10">
+								<input type = "text" name="name" ref="moduleClass" id="module-Class" className = "form-control" placeholder = "Enter Module Suffix class" required />
 							</div>
 						</div>
 						<Positionn key={this.data.templateRegister._id} data={this.data.templateRegister} />
@@ -228,7 +235,7 @@ MenuModuleFront = createReactClass({
 	},
 	render(){
 		showTitle = '';
-		if(this.props.module_title) showTitle = <h4>{this.props.module_title}</h4>;
+		if(this.props.module_title) showTitle = <h3>{this.props.module_title}</h3>;
 		return (
 			<div>
 				{showTitle}

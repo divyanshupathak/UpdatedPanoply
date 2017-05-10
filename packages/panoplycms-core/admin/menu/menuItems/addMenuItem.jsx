@@ -25,7 +25,9 @@ class AddMenuItem extends Component {
   }
   selectMenuItemType(event){
     event.preventDefault();
+    // console.log("-------------------------")
     this.setState({itemType: $('#selectMenuItemType').val()})
+    // console.log("=======>>>>", this.state.itemType)
   }
   getMenuItemTypeValue(val){
     this.setState({ MenuItemTypeValue: val })
@@ -43,7 +45,7 @@ class AddMenuItem extends Component {
       "desc": $('#desc').val(),
       "mainParentId": $('#selectMenu').val(),//FlowRouter.getParam("_id"),
       "MenuItemType": this.state.itemType,
-      "MenuItemTypeId": $('#mainMenu').val(),
+      "MenuItemTypeId": $('#mainMenu').val() ? $('#mainMenu').val() : '',
       "parentId": $('#selectParent').val(),
       "homepage": false
     }
@@ -157,7 +159,6 @@ class AddMenuItem extends Component {
     return getElements();
   }
   render(){
-    that = this
     let msg = '';
     if(this.state.msg){
       msg = <AlertMessage data={'added menu item.'} func={this.resetSuccessMsg.bind(this)}/>
@@ -193,8 +194,8 @@ class AddMenuItem extends Component {
             <div className = "form-group">
               <label htmlFor = "lastname" className = "col-sm-2 control-label">{i18n('ADMIN_MENU_MENU')}</label>
               <div className = "col-sm-10"> 
-                <select id="selectMenu" className = "form-control" onChange={this.getMenuValue.bind(this)} defaultValue={that.props._id}>
-                  <option className="form-control" value="">Select </option>
+                <select id="selectMenu" className = "form-control" onChange={this.getMenuValue.bind(this)} defaultValue={this.props._id}>
+                  <option className="form-control" value="">Select</option>
                   {
                     this.props.Menu1.map((result) => {
                       return <option value={result._id} key={result._id}>{result.title} </option>;
@@ -205,40 +206,51 @@ class AddMenuItem extends Component {
             </div>
             <div className = "form-group">
               <label htmlFor = "lastname" className = "col-sm-2 control-label">{i18n('ADMIN_MENU_MENUITEMS_ADDMENUITEM_FORM_MENUITEMTYPE')}</label>
-              <div className = "col-sm-10"  > 
-                <select className = "form-control" id="selectMenuItemType" onChange={that.selectMenuItemType.bind(that)} required> 
-                  <option className="form-control" value="">Select </option>
+              <div className = "col-sm-10"> 
+                <select className = "form-control" id="selectMenuItemType" onChange={this.selectMenuItemType.bind(this)} required> 
+                  <option className="form-control" value="">Select</option>
                   <option className="form-control" value="category">Category</option>
                   <option className="form-control" value="article">Article</option>
+                  <option className="form-control" value="module">Module</option>
                 </select>
               </div>
             </div>
-            <div className = "form-group">
-              <label htmlFor = "lastname" className = "col-sm-2 control-label">{this.state.itemType.charAt(0).toUpperCase() + this.state.itemType.slice(1)}</label>
-              <div className = "col-sm-10" id="token"> 
-                {
-                  this.state.itemType=='category'?
-                    <select id="mainMenu" className = "form-control" required>
-                      <option className="form-control" value="">Select</option>
-                      {
-                        this.props.categoryData.map((result)=> {
-                          return <option key={result._id} value={result._id} >{result.title} </option>;
-                        })
-                      } 
-                    </select>
-                  : this.state.itemType=='article' ?
-                    <select id="mainMenu" className = "form-control" required>
-                      <option className="form-control" value="">Select</option>
-                        {
-                          this.props.articleData.map((result)=> {
-                            return <option key={result._id} value={result._id} >{result.title} </option>;
-                          })
-                        }
-                    </select>
-                  :/*this.state.itemType=='url'?<input type="text" ref="url" name="url" className="form-control"  />:*/''
-                }
-              </div>  
-            </div>
+            {
+              !this.state.itemType == 'module' || this.state.itemType == 'article' || this.state.itemType == 'category' ?
+                <div className = "form-group">
+                  <label htmlFor = "lastname" className = "col-sm-2 control-label">
+                    {
+                      !this.state.itemType == 'module' || this.state.itemType == 'article' || this.state.itemType == 'category' ?
+                        this.state.itemType.charAt(0).toUpperCase() + this.state.itemType.slice(1)
+                      : ''
+                    }
+                  </label>
+                  <div className = "col-sm-10" id="token"> 
+                    {
+                      this.state.itemType=='category'?
+                        <select id="mainMenu" className = "form-control" required>
+                          <option className="form-control" value="">Select</option>
+                          {
+                            this.props.categoryData.map((result)=> {
+                              return <option key={result._id} value={result._id}>{result.title}</option>;
+                            })
+                          } 
+                        </select>
+                      : this.state.itemType=='article' ?
+                        <select id="mainMenu" className = "form-control" required>
+                          <option className="form-control" value="">Select</option>
+                            {
+                              this.props.articleData.map((result)=> {
+                                return <option key={result._id} value={result._id}>{result.title}</option>;
+                              })
+                            }
+                        </select>
+                      :''
+                    }
+                  </div>
+                </div>
+              : ''
+            }
             <div className = "form-group">
               <label htmlFor = "lastname" className = "col-sm-2 control-label">{i18n('ADMIN_MENU_MENUITEMS_ADDMENUITEM_FORM_PARENT')}</label>
               <div className = "col-sm-10" id="token" > 

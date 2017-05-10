@@ -68,7 +68,7 @@ class Login extends Component {
     // self=this;
     Meteor.loginWithPassword(email, password, (err,data) =>{
       if(err){
-        console.log("Error while log in ->>", err);
+        // console.log("Error while log in ->>", err);
         this.setState({ errorMsg: err.reason })
       }else{
         this.setState({ data:data })

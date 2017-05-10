@@ -42,6 +42,7 @@ EditMenuModule = createReactClass({
 				position:position,
 				showTitle:showTitle,
 				menuItems:menuItems,
+				moduleClass: $("#ModuleClass").val(),
 				allPages:allPage,
 				moduleData:{
 					menuItem:menu
@@ -121,6 +122,12 @@ EditMenuModule = createReactClass({
 							<label htmlFor = "firstname" className = "col-sm-2 control-label">{i18n('ADMIN_COTNENTS_ARTICLES_ADDARTICLE_FORM_TITLE')}</label>
 							<div className = "col-sm-10">
 								<input type = "text" name="title" ref="title" className = "form-control"  placeholder = "Enter title" defaultValue={this.data.menuModuleModuleData?this.data.menuModuleModuleData.name:''} required />
+							</div>
+						</div>
+						<div className = "form-group">
+							<label htmlFor = "firstname" className = "col-sm-2 control-label">Module Suffix Class</label>
+							<div className = "col-sm-10">
+								<input type = "text" name="name" ref="moduleClass" id="ModuleClass" className = "form-control" defaultValue={this.data.htmlblockModuleData?this.data.htmlblockModuleData.moduleClass:''} required />
 							</div>
 						</div>
 						<Positionn key={this.data.templateRegister._id} data={this.data.templateRegister} value={this.data.menuModuleModuleData?this.data.menuModuleModuleData.position:''} />

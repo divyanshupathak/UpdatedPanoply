@@ -39,28 +39,32 @@ export default class FrontHeader extends Component {
 					      </div>
 					    </div>
 					  </div>
-						<div className="row">
-							<div className="col-sm-4">
-								<div className="logo">
-									{
-										img ?
-											<img height="50px" src={img.url()} />
-										:
-											<div>
-												<h2 style={{marginTop: "5px"}} className="blog-title" onClick={this.onClick.bind(this)}>{this.props.siteData?this.props.siteData.name:''}</h2>
-											</div>
-									}
+					  <div className="navbar-head animated fadeInUp">
+							<div className="row">
+								<div className="col-sm-4">
+									<div className="logo animated fadeInLeft">
+										{
+											img ?
+												<img src={img.url()} />
+											:
+												<div>
+													<h2 style={{marginTop: "5px"}} className="blog-title" onClick={this.onClick.bind(this)}>{this.props.siteData?this.props.siteData.name:''}</h2>
+												</div>
+										}
+									</div>
+								</div>
+								<div className="col-lg-8">
+									<div id="main_nav" className="pull-right animated fadeInRight">
+    		          	{
+											this.props.module ?
+												this.props.module.map(m => {
+													return m;
+												})
+											: ''
+										}
+    		          </div>
 								</div>
 							</div>
-							<nav className="nav blog-nav pull-right" id="main-nav">
-								{
-									this.props.module ?
-										this.props.module.map(m => {
-											return m;
-										})
-									: ''
-								}
-							</nav>
 						</div>
 					</div>
 				{/*</div>*/}

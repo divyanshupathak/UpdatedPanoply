@@ -88,20 +88,12 @@ _.extend(PanoplyRouter, {
 					/* Get List of modules on position */
 					function getModulesList(positions, modulesList, moduleTypes){
 						
-						// positions = Positions defined in templates
-						// modulesList = Modules created by User
-						// moduleTypes = html block, menu module, slider module etc
-
 						let modules = {}, defaultModules = {}
 						_.each(positions, position => {
-							// console.log("position ----", position)
 							let mod = [], defaultMod = []
 							_.each(modulesList, modules => {
-								// console.log("modules ----", modules)
-								// console.log("modules moduleData ----", modules.moduleData)
 								if(modules.position == position){
 									_.each(moduleTypes, moduleType => {
-										// console.log("moduleType ----", moduleType)
 										if(moduleType.name == modules.type){
 											modules.moduleData ? modules.moduleData['key']=Math.random() : modules['moduleData'] = { key: Math.random() }
 											if(modules.showTitle) modules.moduleData['module_title'] = modules.name
@@ -114,15 +106,12 @@ _.extend(PanoplyRouter, {
 							modules[position] = mod;
 							defaultModules[position] = defaultMod;
 						})
-						// console.log("=====", modules)
-						// console.log(">>>>>", defaultModules)
 						return { modules, defaultModules }
 					}
 
 					/* Modules show on only specified menuItem */
 
 					_.each(menuItems, (i) => {
-						// console.log("menuItems ------", i)
 						if(i.MenuItemType == 'url') return;
 
 						/* Get Modules List with specified menuItem id */
@@ -143,12 +132,13 @@ _.extend(PanoplyRouter, {
 							case 'article':
 								content = defaultTemplate.articleView;
 								break;
+							case 'module':
+								content = defaultTemplate.noArticleView;
+								break;
 						}
 
 						let route = {
 							action: (params, queryParams) => {
-								console.log("MenuItemTypeId --------", i.MenuItemTypeId);
-								// i.MenuItemTypeId = article id
 								params = { id: i.MenuItemTypeId, modules: modules};
 								ReactLayout.render(eval(defaultTemplate.layout), {
 									content: React.createElement(eval(content), params),

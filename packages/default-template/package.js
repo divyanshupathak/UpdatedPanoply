@@ -71,8 +71,8 @@ Package.onUse(function(api) {
 		'DefaultTemplate',
 		'DefaultCategory',
 		'DefaultArticle',
+		'ModuleOnly',
 		'DefaultNotFound',
 		'DefaultOffline'
 	],['client']);
-	
 });

@@ -43,6 +43,7 @@ EditHtmlblock = createReactClass({
 				position:position,
 				showTitle:showTitle,
 				menuItems:menuItems,
+				moduleClass: $("#moduleClass").val(),
 				allPages:allPage,
 				moduleData:{
 					html:article
@@ -128,6 +129,12 @@ EditHtmlblock = createReactClass({
 							<label htmlFor = "firstname" className = "col-sm-2 control-label">Name</label>
 							<div className = "col-sm-10">
 								<input type = "text" name="name" ref="name"  className = "form-control"  placeholder = "Enter title" defaultValue={this.data.htmlblockModuleData?this.data.htmlblockModuleData.name:''} required/>
+							</div>
+						</div>
+						<div className = "form-group">
+							<label htmlFor = "firstname" className = "col-sm-2 control-label">Module Suffix Class</label>
+							<div className = "col-sm-10">
+								<input type = "text" name="name" ref="moduleClass" id="moduleClass" className = "form-control" defaultValue={this.data.htmlblockModuleData?this.data.htmlblockModuleData.moduleClass:''} required />
 							</div>
 						</div>
 						<Positions key={this.data.templateRegister._id} data={this.data.templateRegister} value={this.data.htmlblockModuleData?this.data.htmlblockModuleData.position:''}/>

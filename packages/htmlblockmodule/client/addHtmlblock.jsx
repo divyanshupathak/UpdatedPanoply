@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { createContainer } from 'meteor/react-meteor-data';
 
 import MenuItemType from './menuItemTypes.jsx'
 import Positions from './positions.jsx'
@@ -41,6 +42,7 @@ AddHtmlblock = createReactClass({
 				position: position,
 				showTitle: showTitle,
 				menuItems: menuItems,
+				moduleClass: $("#module-class").val(),
 				allPages: allPage,
 				moduleData:{
 					html: article
@@ -127,6 +129,12 @@ AddHtmlblock = createReactClass({
 								<input type = "text" name="name" ref="name" className = "form-control" placeholder = "Enter title" required/>
 							</div>
 						</div>
+						<div className = "form-group">
+							<label htmlFor = "firstname" className = "col-sm-2 control-label">Module Suffix Class</label>
+							<div className = "col-sm-10">
+								<input type = "text" name="name" ref="moduleClass" id="module-class" className = "form-control" placeholder = "Enter Module Suffix class" required />
+							</div>
+						</div>
 						<Positions key={this.data.templateRegister._id} data={this.data.templateRegister} value={this.data.templateRegister} />
 						<div className = "form-group">
 							<label htmlFor = "lastname" className = "col-sm-2 control-label">{i18n('ADMIN_COTNENTS_ARTICLES_ADDARTICLE_FORM_ARTICLE')}</label>
@@ -181,7 +189,7 @@ AddHtmlblock = createReactClass({
 HTMLBlock = data => {
 	/*console.log("addHtmlblock :: params =>>", data)*/
 	showTitle = '';
-	if(data.module_title) showTitle = <h4>{data.module_title}</h4>;
+	if(data.module_title) showTitle = <h3>{data.module_title}</h3>;
 	return (
 		<div>
 			{showTitle}

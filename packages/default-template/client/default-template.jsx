@@ -5,6 +5,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 var createReactClass = require('create-react-class');
 
 import FrontHeader from './homeLayouts/Header.jsx';
+import FrontFooter from './homeLayouts/Footer.jsx';
+
 
 DefaultTemplate = createReactClass({
 	mixins:[ReactMeteorData],
@@ -59,12 +61,10 @@ DefaultTemplate = createReactClass({
 	},
 	render() {
 		console.log("======", this.props)
-		// console.log("********", this.props.content)
-		// console.log("mod data ==>", this.data.modulesList)
 		return (
 			<div>
 				<FrontHeader module={this.props.mainHeaderRight} topHeaderLeft={this.props.topHeaderLeft} topHeaderRight={this.props.topHeaderRight} siteData={this.data.result} />
-
+				
 				<div className="container">
 					<div className="row">
 						<div className={_.isEmpty(this.props.sidebar) ? "col-sm-12 blog-main" : "col-sm-8 blog-main"}>
@@ -75,7 +75,53 @@ DefaultTemplate = createReactClass({
 						</div>
 					</div>
 				</div>
-				<FrontFooter module={this.props.footer} />
+
+				<FrontFooter mainFooterLeft={this.props.mainFooterLeft} mainFooterRight={this.props.mainFooterRight} copyright={this.props.copyright} />
+			</div>
+		)
+	}
+});
+
+ModuleOnly = createReactClass({
+	render(){
+		console.log("-------->>>", this.props)
+		return(
+			<div>
+				{
+					this.props.modules.showcase && this.props.modules.showcase.length > 0 ?
+						this.props.modules.showcase.map((value) => {
+							return value;
+						})
+					: ''
+				}
+				{
+					this.props.modules.utility && this.props.modules.utility.length > 0 ?
+						this.props.modules.utility.map((value) => {
+							return value;
+						})
+					: ''
+				}
+				{
+					this.props.modules.feature && this.props.modules.feature.length > 0 ?
+						this.props.modules.feature.map((value) => {
+							return value;
+						})
+					: ''
+				}
+				{
+					this.props.modules.extension && this.props.modules.extension.length > 0 ?
+						this.props.modules.extension.map((value) => {
+							return value;
+						})
+					: ''
+				}
+				{
+					this.props.modules.bottom && this.props.modules.bottom.length > 0 ?
+						this.props.modules.bottom.map((value) => {
+							return value;
+						})
+					: ''
+				}
 			</div>
 		)
 	}
@@ -132,8 +178,6 @@ DefaultArticle = createReactClass({
 		}
 	},
 	render(){
-		// console.log(">>>>>>", this.props.modules)
-		// console.log(FlowRouter.current())
 		if(this.data.article){
 			if(!_.has(this.data.article, "_id")){
 				return <LoadingSpinner />;
@@ -150,48 +194,14 @@ DefaultArticle = createReactClass({
 })
 
 ArticleFullView = data => {
-	console.log(data)
+	// console.log(data)
 	let userData = Meteor.users.findOne({_id: data.ownerId})
 	return (
 		<div>
-			{
-				data.modules && data.modules.showcase && data.modules.showcase.length > 0 ?
-					data.modules.showcase.map((value) => {
-						return value;
-					})
-				: ''
-			}
-			{
-				data.modules && data.modules.utility && data.modules.utility.length > 0 ?
-					data.modules.utility.map((value) => {
-						return value;
-					})
-				: ''
-			}
-			{
-				data.modules && data.modules.feature && data.modules.feature.length > 0 ?
-					data.modules.feature.map((value) => {
-						return value;
-					})
-				: ''
-			}
-			{
-				data.modules && data.modules.extension && data.modules.extension.length > 0 ?
-					data.modules.extension.map((value) => {
-						return value;
-					})
-				: ''
-			}
-			{
-				data.modules && data.modules.bottom && data.modules.bottom.length > 0 ?
-					data.modules.bottom.map((value) => {
-						return value;
-					})
-				: ''
-			}
 			<div className="blog-post">
 				<h2 className="blog-post-title">{data.articles && data.articles.title ? data.articles.title.toUpperCase() :''}</h2>
-				<p className="blog-post-meta">{data.articles && data.articles.createdAt ? new Date(data.articles.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' :''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
+				<p className="post-meta-data">{data.articles && data.articles.createdAt ? new Date(data.articles.createdAt).toDateString() :''} {userData && userData.profile && userData.profile.username ? 'by' :''} <strong>{userData && userData.profile && userData.profile.username ? userData.profile.username :''}</strong></p>
+				<br/>
 				<div dangerouslySetInnerHTML={{__html: data.articles && data.articles.article ? data.articles.article :''}} />
 				<ShowTags tags={data.articles && data.articles.tags ? data.articles.tags :''} />
 			</div>
@@ -209,7 +219,6 @@ DefaultCategory = createReactClass({
 	},
 	render(){
 		if(this.data.articles && this.data.articles.length){
-			console.log("++++++", this.data.articles)
 			if(!this.data.articles.length){
 				return <LoadingSpinner />;
 			}
